@@ -138,5 +138,6 @@ addToCartBtn.addEventListener("click", function () {
 		// if a valide quantity and a color is selected, we add the product to the cart on the local storage
 		getCart();
 		addToCart();
+		alert("Cet article a bien été ajouté à votre panier.")
 	}
 });
