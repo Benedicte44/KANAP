@@ -91,7 +91,8 @@ async function articleCartParams() {
 	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
 		deleteBtn[j].addEventListener("click", (event) => {
 			event.preventDefault();
-			cart = cart.filter(p => p.id != cart[j].id); // We keep in the localStorage the products which have a different id from the targeted product
+			let productToCancel = cart.find(product => product.id == cart[j].id && product.color == cart[j].color);
+			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id from the targeted product
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload(); // we refresh the page
 		});
