@@ -55,9 +55,11 @@ function getCart() {
 
 
 
-/////////////////////////////// Function to display the article's attributes in the cart
-async function displayArticle() {
+/////////////////////////////// Function to DISPLAY the products' details and make the cart dynamic with DELETE and CHANGE QUANTITY functions
+async function articleCartParams() {
 	articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
+
+/////////////////////////////// Function to DISPLAY the article's attributes in the cart
 	for (let i = 0; i < cart.length; i++) { // We launch a for loop to get each articles with its details at the rigth place
 		foundProduct = articles.find(product => product._id === cart[i].id); // We target each product in the API's articles array
 		// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
@@ -92,7 +94,6 @@ async function displayArticle() {
 		deleteBtn[j].addEventListener("click", (event) => {
 			event.preventDefault();
 			cart = cart.filter(p => p.id != cart[j].id);
-
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload();
 		});
@@ -104,7 +105,6 @@ async function displayArticle() {
 	for (let k = 0; k < inputQty.length ; k++) {
 		inputQty[k].addEventListener("change", (event) => {
 			event.preventDefault();
-
 			cart[k].quantity = Number(inputQty[k].value)
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload();
@@ -112,7 +112,7 @@ async function displayArticle() {
 	}
 	console.log(cart)
 }
-displayArticle();
+articleCartParams();
 
 
 
@@ -140,51 +140,6 @@ totalToPay();
 
 
 
-
-
-
-/*deleteProduct();
-//targetedProductArticle = document.getElementById(cart[i].id);
-		deleteBtn = targetedProductArticle.querySelector(".deleteItem");
-		inputQty = targetedProductArticle.getElementsByTagName("itemQuantity")
-		
-/////////////////////////////// The function to register the quantities changes 
-inputQty.addEventListener("change", (e) => {
-	console.log("on démarre")
-	/*for (let i=0 ; i < cart.length; i++) {
-		let newTargetQuantity = parseInt(inputQty.value);
-		let productQuantityToChange = cart.find((object) => object.id == cart[i].id && object.color == cart[i].color
-				); // We check if the products of the same color is ever in our cart
-		productQuantityToChange.quantity = newTargetQuantity;
-			/*}*/
-		
-
-// If the visitor change the quantity of product he wants to order, we send the new quantity on the local storage
-
-/*inputQty = document.getElementByName("itemQuantity"); // We target the inputs where the quantity of product can be changed.;*/
-
-/*
-cart[i].quantity = inputQty.addEventListener("change", () => {
-							let newTargetQuantity = parseInt(inputQty[i].value);
-							let productQuantityToChange = cart.find(
-								(object) => object.id == cart[i].id && object.color == cart[i].color
-							); // We target the good product in our cart
-						productQuantityToChange.quantity = newTargetQuantity;
-						});*/
-/*console.log(typeof inputQty)
-function newQuantity(){
-	console.log("on démarre")
-	console.log("on y va");
-	for (let i=0 ; i < cart.length; i++) {
-		inputQty[i].addEventListener('change', () => {
-			let newTargetQuantity = parseInt(inputQty[i].value);
-			let productQuantityToChange = cart.find(
-					(object) => object.id == cart[i].id && object.color == cart[i].color
-			); // We check if the products of the same color is ever in our cart
-		productQuantityToChange.quantity = newTargetQuantity;
-		})
-	};
-};
-
-
-newQuantity();*/
+if (cart.length == 0){
+	productsOrdered.innerHTML += `<p>Votre panier est vide</p>`;
+}
