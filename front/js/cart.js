@@ -84,19 +84,33 @@ async function displayArticle() {
                                                                         </article>`;								
 	}
 	
+
+
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
-inputQty = document.querySelectorAll(".itemQuantity");
-console.log(inputQty)
-deleteBtn = document.querySelectorAll(".deleteItem");
-console.log(deleteBtn)
-for (let j = 0; j < deleteBtn.length ; j++) {
-	deleteBtn[j].addEventListener("click", (event) => {
-		event.preventDefault();
-		
-	});
-}
+	deleteBtn = document.querySelectorAll(".deleteItem");
+	for (let j = 0; j < deleteBtn.length ; j++) {
+		deleteBtn[j].addEventListener("click", (event) => {
+			event.preventDefault();
+			cart = cart.filter(p => p.id != cart[j].id);
 
+			localStorage.setItem("cart", JSON.stringify(cart));
+			location.reload();
+		});
+	}
 
+/////////////////////////////// The function to CHANGE QUANTITY and send it to the localStorage
+	inputQty = document.querySelectorAll(".itemQuantity");
+	console.log(inputQty);
+	for (let k = 0; k < inputQty.length ; k++) {
+		inputQty[k].addEventListener("change", (event) => {
+			event.preventDefault();
+
+			cart[k].quantity = Number(inputQty[k].value)
+			localStorage.setItem("cart", JSON.stringify(cart));
+			location.reload();
+		});
+	}
+	console.log(cart)
 }
 displayArticle();
 
