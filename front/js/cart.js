@@ -61,7 +61,30 @@ async function articleCartParams() {
 	for (let i = 0; i < cart.length; i++) { // We launch a for loop to get each articles with its details at the rigth place
 		foundProduct = articles.find(product => product._id === cart[i].id); // We target each product in the API's articles array
 		// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-		productsOrdered.innerHTML += `<article class="cart__item" id="${cart[i].id}" data-id="${cart[i].id}" data-color="${cart[i].color}">
+		let productArticle = document.createElement("article")
+		productArticle.id = cart[i].id;
+		productArticle.className = "cart__item";
+		productsOrdered.appendChild(productArticle)
+		productArticle.innerHTML = `<div class="cart__item__img">
+										<img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
+									</div>
+									<div class="cart__item__content">
+									<div class="cart__item__content__description">
+										<h2>${cart[i].name}</h2>
+										<p>${cart[i].color}</p>
+										<p>${foundProduct.price} €</p>
+									</div>
+									<div class="cart__item__content__settings">
+										<div class="cart__item__content__settings__quantity">
+										<p>Qté : </p>
+										<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantity}">
+										</div> 
+										<div class="cart__item__content__settings__delete">
+													<p class="deleteItem">Supprimer</p>
+										</div>
+												</div>
+										</div>`
+		/*productsOrdered.innerHTML += `<article class="cart__item" id="${cart[i].id}" data-id="${cart[i].id}" data-color="${cart[i].color}">
                                                           <div class="cart__item__img">
                                                                     <img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
                                                                 </div>
@@ -81,7 +104,7 @@ async function articleCartParams() {
                                                                                 </div>
                                                                             </div>
                                                                             </div>
-                                                                        </article>`;								
+                                                                        </article>`;	*/							
 	}
 	
 
