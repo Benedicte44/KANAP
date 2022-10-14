@@ -115,7 +115,7 @@ totalToPay();
 function deleteProduct () {
 	cart.forEach(element => {
 		console.log(deleteBtn);
-	deleteBtn.innerHTML.addEventListener("click", () => {
+	deleteBtn.addEventListener("click", () => {
 			alert("produit supprimé")
 		})
 	})
