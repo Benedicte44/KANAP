@@ -9,21 +9,13 @@ let descriptionArea = "";
 let priceArea = "";
 let foundProduct = "";
 let newProductQuantity = 0;
-let productToChange = {
-	// We define the object productToChange with all details on the product to send to localstorage
-	id: "",
-	name: "",
-	quantity: "0",
-	srcImg: "",
-	altTxt: "",
-	color: "",
-};
 let quantitySum = 0;
 let totalQuantity = document.getElementById("totalQuantity");
 let priceSum = 0;
 let totalPrice = document.getElementById("totalPrice");
+let targetedProductArticle = "";
 let deleteBtn = document.querySelectorAll(".deleteItem");
-let inputQty = "";
+let inputQty = document.querySelectorAll(".itemQuantity");
 
 
 /////////////////////////////// Function to get all the API's articles in an array
@@ -66,7 +58,7 @@ async function displayArticle() {
 	for (let i = 0; i < cart.length; i++) { // We launch a for loop to get each articles with its details at the rigth place
 		foundProduct = articles.find(product => product._id === cart[i].id); // We target each product in the API's articles array
 		// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-		productsOrdered.innerHTML += `<article class="cart__item" id="itération${[i]}${cart[i].id}" data-id="${cart[i].id}" ( data-color="${cart[i].color}">
+		productsOrdered.innerHTML += `<article class="cart__item" id="${cart[i].id}" data-id="${cart[i].id}" data-color="${cart[i].color}">
                                                           <div class="cart__item__img">
                                                                     <img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
                                                                 </div>
@@ -87,9 +79,12 @@ async function displayArticle() {
                                                                             </div>
                                                                             </div>
                                                                         </article>`;
+		
+										
 	}
 }
 displayArticle();
+
 
 /////////////////////////////// The function to calculate the total quantity
 function totalQuantityOfProduct () {
@@ -100,41 +95,46 @@ function totalQuantityOfProduct () {
 }
 totalQuantityOfProduct();
 
+
 /////////////////////////////// The function to calculate the total amount of the cart
 async function totalToPay () {
 	articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
 	cart.forEach(element => {
 		foundProduct = articles.find(product => product._id === element.id); // We target each product in the API's articles array
-		priceSum += (element.quantity * foundProduct.price)
+		priceSum += (element.quantity * foundProduct.price);
 	});
 	totalPrice.innerText = priceSum;
 };
 totalToPay();
 
-/////////////////////////////// The function to delete a product and remove it form the localStorage
-function deleteProduct () {
-	cart.forEach(element => {
-		console.log(deleteBtn);
-	deleteBtn.addEventListener("click", () => {
-			alert("produit supprimé")
-		})
-	})
-}
-deleteProduct();
 
+/////////////////////////////// The function to delete a product and remove it form the localStorage
+for (let j = 0; j < deleteBtn.length ; j++) {
+	deleteBtn[j].addEventListener("click", (event) => {
+		event.preventDefault();
+		alert("produit supprimé")
+	});
+}
+
+function deleteProduct () {
+
+}
+/*deleteProduct();
+//targetedProductArticle = document.getElementById(cart[i].id);
+		deleteBtn = targetedProductArticle.querySelector(".deleteItem");
+		inputQty = targetedProductArticle.getElementsByTagName("itemQuantity")
+		
 /////////////////////////////// The function to register the quantities changes 
-inputQty = document.querySelectorAll(".itemQuantity");
-		console.log(typeof inputQty.value);
-		inputQty.addEventListener('change', () => {
-			console.log("on démarre")
-			/*for (let i=0 ; i < cart.length; i++) {*/
-				let newTargetQuantity = parseInt(inputQty.value);
-				let productQuantityToChange = cart.find(
-					(object) => object.id == cart[i].id && object.color == cart[i].color
+inputQty.addEventListener("change", (e) => {
+	console.log("on démarre")
+	/*for (let i=0 ; i < cart.length; i++) {
+		let newTargetQuantity = parseInt(inputQty.value);
+		let productQuantityToChange = cart.find((object) => object.id == cart[i].id && object.color == cart[i].color
 				); // We check if the products of the same color is ever in our cart
-				productQuantityToChange.quantity = newTargetQuantity;
+		productQuantityToChange.quantity = newTargetQuantity;
 			/*}*/
-		});
+		
+
 // If the visitor change the quantity of product he wants to order, we send the new quantity on the local storage
 
 /*inputQty = document.getElementByName("itemQuantity"); // We target the inputs where the quantity of product can be changed.;*/
