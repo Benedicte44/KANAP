@@ -29,8 +29,9 @@ let productToAdd = {
 let cart = ""; // The cart which is in our local Storage
 let addToCartBtn = document.getElementById("addToCart"); // The button, to add products in the cart
 
-// Main function of the product page
 
+
+// Main function of the product page
 main(); // The function "main" is defined and run at the launch of the page
 
 async function main() {
@@ -43,6 +44,8 @@ async function main() {
 		}
 	});
 }
+
+
 
 // Function to get all my articles in an array
 async function getArticles() {
@@ -62,6 +65,8 @@ async function getArticles() {
 			alert(error);
 		});
 }
+
+
 
 // Function to display the article's attributes
 function displayArticle(object) {
@@ -85,18 +90,23 @@ function displayArticle(object) {
 	productToAdd.altTxt = object.altTxt;
 }
 
+
+
 // We define an event listener on the quantity input to get the product's quantity to add in our object productToAdd
 productQuantity.addEventListener("change", (event) => {
 	productToAdd.quantity = parseInt(event.target.value);
 });
+
+
 
 // We define an event listener on the color input to get the product's color choice in our object productToAdd
 inputColors.addEventListener("input", (event) => {
 	productToAdd.color = event.target.value;
 });
 
-// WE DEFINE THE ADD TO CART BTN
 
+
+// WE DEFINE THE ADD TO CART BTN
 function getCart() {
 	// We call our local storage to get the visitor cart in an array
 	cart = localStorage.getItem("cart");
