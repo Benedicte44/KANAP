@@ -5,8 +5,6 @@
 let cart = ""; // The cart which is in our local Storage
 let articles = []; // We define a variable for the array that will take all the API's products
 let productsOrdered = document.getElementById("cart__items"); // We target the HTML element that contains the cart products' details.
-let descriptionArea = ""; 
-let priceArea = "";
 let foundProduct = "";
 let newProductQuantity = 0;
 let quantitySum = 0;
@@ -14,8 +12,9 @@ let totalQuantity = document.getElementById("totalQuantity");
 let priceSum = 0;
 let totalPrice = document.getElementById("totalPrice");
 let targetedProductArticle = "";
-let deleteBtn = document.querySelectorAll(".deleteItem");
-let inputQty = document.querySelectorAll(".itemQuantity");
+let inputQty = "";
+let deleteBtn = "";
+
 
 
 /////////////////////////////// Function to get all the API's articles in an array
@@ -37,6 +36,8 @@ async function getArticles() {
 		});
 }
 
+
+
 /////////////////////////////// The function getCart is defined to get the cart which is in the localStorage
 getCart();
 
@@ -51,6 +52,8 @@ function getCart() {
 		cart = JSON.parse(cart);
 	}
 }
+
+
 
 /////////////////////////////// Function to display the article's attributes in the cart
 async function displayArticle() {
@@ -78,15 +81,28 @@ async function displayArticle() {
                                                                                 </div>
                                                                             </div>
                                                                             </div>
-                                                                        </article>`;
-		
-										
+                                                                        </article>`;								
 	}
+	
+/////////////////////////////// The function to DELETE a product and remove it from the localStorage
+inputQty = document.querySelectorAll(".itemQuantity");
+console.log(inputQty)
+deleteBtn = document.querySelectorAll(".deleteItem");
+console.log(deleteBtn)
+for (let j = 0; j < deleteBtn.length ; j++) {
+	deleteBtn[j].addEventListener("click", (event) => {
+		event.preventDefault();
+		
+	});
+}
+
+
 }
 displayArticle();
 
 
-/////////////////////////////// The function to calculate the total quantity
+
+/////////////////////////////// The function to calculate the total QUANTITY
 function totalQuantityOfProduct () {
 	cart.forEach(element => {
 		quantitySum += element.quantity
@@ -96,7 +112,8 @@ function totalQuantityOfProduct () {
 totalQuantityOfProduct();
 
 
-/////////////////////////////// The function to calculate the total amount of the cart
+
+/////////////////////////////// The function to calculate the TOTAL amount of the cart
 async function totalToPay () {
 	articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
 	cart.forEach(element => {
@@ -108,17 +125,10 @@ async function totalToPay () {
 totalToPay();
 
 
-/////////////////////////////// The function to delete a product and remove it form the localStorage
-for (let j = 0; j < deleteBtn.length ; j++) {
-	deleteBtn[j].addEventListener("click", (event) => {
-		event.preventDefault();
-		alert("produit supprimé")
-	});
-}
 
-function deleteProduct () {
 
-}
+
+
 /*deleteProduct();
 //targetedProductArticle = document.getElementById(cart[i].id);
 		deleteBtn = targetedProductArticle.querySelector(".deleteItem");
