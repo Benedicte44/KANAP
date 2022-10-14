@@ -3,15 +3,13 @@
 
 /////////////////////////////// Definition of variables
 let cart = ""; // The cart which is in our local Storage
-let articles = []; // We define a variable for the array that will take all the API's products
-let productsOrdered = document.getElementById("cart__items"); // We target the HTML element that contains the cart products' details.
-let foundProduct = "";
-let newProductQuantity = 0;
-let quantitySum = 0;
-let totalQuantity = document.getElementById("totalQuantity");
-let priceSum = 0;
-let totalPrice = document.getElementById("totalPrice");
-let targetedProductArticle = "";
+let articles = []; // the array that will take all the API's products
+let productsOrdered = document.getElementById("cart__items"); // the HTML element that contains the cart products' details.
+let foundProduct = ""; // defined to collecte the details (eg the price) of the targeted product on the API's data
+let quantitySum = 0; // the total number of products contained in the cart
+let totalQuantity = document.getElementById("totalQuantity"); // the place to put the quantitySum data on the DOM
+let priceSum = 0; // the total amount of the cart
+let totalPrice = document.getElementById("totalPrice"); // the place to put the priceSum data on the DOM
 let inputQty = "";
 let deleteBtn = "";
 
@@ -89,36 +87,34 @@ async function articleCartParams() {
 
 
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
-	deleteBtn = document.querySelectorAll(".deleteItem");
-	for (let j = 0; j < deleteBtn.length ; j++) {
+	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
 		deleteBtn[j].addEventListener("click", (event) => {
 			event.preventDefault();
-			cart = cart.filter(p => p.id != cart[j].id);
+			cart = cart.filter(p => p.id != cart[j].id); // We keep in the localStorage the products which have a different id from the targeted product
 			localStorage.setItem("cart", JSON.stringify(cart));
-			location.reload();
+			location.reload(); // we refresh the page
 		});
 	}
 
 /////////////////////////////// The function to CHANGE QUANTITY and send it to the localStorage
-	inputQty = document.querySelectorAll(".itemQuantity");
-	console.log(inputQty);
+	inputQty = document.querySelectorAll(".itemQuantity"); // All the quantity inputs are targeted
 	for (let k = 0; k < inputQty.length ; k++) {
 		inputQty[k].addEventListener("change", (event) => {
 			event.preventDefault();
-			cart[k].quantity = Number(inputQty[k].value)
+			cart[k].quantity = Number(inputQty[k].value) // We replace the quantity of product by the new quantity selected in the localStorage
 			localStorage.setItem("cart", JSON.stringify(cart));
-			location.reload();
+			location.reload();// we refresh the page
 		});
 	}
-	console.log(cart)
 }
 articleCartParams();
 
 
 
-/////////////////////////////// The function to calculate the total QUANTITY
+/////////////////////////////// The function to calculate the total QUANTITY and put it in the DOM
 function totalQuantityOfProduct () {
-	cart.forEach(element => {
+	cart.forEach(element => { // We consider each element of the cart and we add its quantity to the global quantity
 		quantitySum += element.quantity
 	});
 	totalQuantity.innerText = quantitySum;
@@ -131,15 +127,15 @@ totalQuantityOfProduct();
 async function totalToPay () {
 	articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
 	cart.forEach(element => {
-		foundProduct = articles.find(product => product._id === element.id); // We target each product in the API's articles array
-		priceSum += (element.quantity * foundProduct.price);
+		foundProduct = articles.find(product => product._id === element.id); // We target each product in the API's articles array that fits with the cart items, to take its price
+		priceSum += (element.quantity * foundProduct.price); 
 	});
 	totalPrice.innerText = priceSum;
 };
 totalToPay();
 
 
-
+/////////////////////////////// If the CART is EMPTY, a new message appears
 if (cart.length == 0){
 	productsOrdered.innerHTML += `<p>Votre panier est vide</p>`;
 }
