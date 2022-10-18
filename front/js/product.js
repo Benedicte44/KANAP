@@ -1,4 +1,5 @@
 // Script for the product page
+import getArticles from "./script.js";
 
 // Definition of variables
 let searchParams = new URLSearchParams(window.location.search); // We collect our url elements
@@ -48,7 +49,7 @@ async function main() {
 
 
 // Function to get all my articles in an array
-async function getArticles() {
+/*async function getArticles() {
 	return fetch("http://localhost:3000/api/products") // we call the API
 		.then(function (httpBodyResponse) {
 			if (httpBodyResponse.ok) {
@@ -64,7 +65,7 @@ async function getArticles() {
 			// if the connection to the API doesn't work we will have an error message in a pop up
 			alert(error);
 		});
-}
+}*/
 
 
 

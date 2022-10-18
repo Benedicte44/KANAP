@@ -7,14 +7,14 @@ main(); // The function "main" is defined and run at the launch of the page
 async function main() {
 	// the function main runs to display all products of the data base on the index page
 	const articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
-	for (product of articles) {
+	for (let product of articles) {
 		// this "for" function allows us to display all the data base's products as wanted in the template thanks to the function "displayArticle" defined bellow
 		displayArticle(product);
 	}
 }
 
 // Function to get all my articles in an array
-async function getArticles() {
+export default async function getArticles() {
 	return fetch("http://localhost:3000/api/products") // we call the API
 		.then(function (httpBodyResponse) {
 			if (httpBodyResponse.ok) {
@@ -34,8 +34,18 @@ async function getArticles() {
 
 // Function to display an article in my .items element
 function displayArticle(product) {
+	let section = document.getElementById("items");
+	console.log(product)
+	for (let p of product) {
+		let a = document.createElement('a');
+		a.setAttribute('href', './product.html?id=' + p._id);
+		section.appendChild(a);
+		let b = document.createElement('article');
+		a.appendChild(b);
+		b.innerHTML += "<img src=" + p.imageUrl + "alt=" + p.altTxt + ">" + "<h3 class='productName'" + p.name + "</h3>" + ">p class='productDescription'" + p.description + "</p>";
+	}
 	// we select the element HTML where products have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-	document.querySelector(
+	/*document.querySelector(
 		".items"
 	).innerHTML += `<a href="./product.html?id=${product._id}">
                                                     <article>
@@ -44,4 +54,5 @@ function displayArticle(product) {
                                                     <p class="productDescription">${product.description}</p>
                                                     </article>
                                                     </a>`;
+													console.log(product._id)*/
 }

@@ -1,5 +1,6 @@
 ///////////////////////////////THE SCRIPT FOR THE CART PAGE
 
+import getArticles from "./script.js";
 
 /////////////////////////////// Definition of variables
 let cart = ""; // The cart which is in our local Storage
@@ -17,7 +18,8 @@ let productArticle = "";
 
 
 /////////////////////////////// Function to get all the API's articles in an array
-async function getArticles() {
+
+/*async function getArticles() {
 	return fetch("http://localhost:3000/api/products") // we call the API
 		.then(function (httpBodyResponse) {
 			if (httpBodyResponse.ok) {
@@ -33,7 +35,7 @@ async function getArticles() {
 			// if the connection to the API doesn't work we will have an error message in a pop up
 			alert(error);
 		});
-}
+}*/
 
 
 
@@ -145,8 +147,6 @@ function totalQuantityOfProduct () {
 	totalQuantity.innerText = quantitySum;
 }
 totalQuantityOfProduct();
-
-deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
 
 /////////////////////////////// The function to calculate the TOTAL amount of the cart
 async function totalToPay () {
