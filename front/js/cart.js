@@ -12,6 +12,7 @@ let priceSum = 0; // the total amount of the cart
 let totalPrice = document.getElementById("totalPrice"); // the place to put the priceSum data on the DOM
 let inputQty = "";
 let deleteBtn = "";
+let productArticle = "";
 
 
 
@@ -61,10 +62,10 @@ async function articleCartParams() {
 	for (let i = 0; i < cart.length; i++) { // We launch a for loop to get each articles with its details at the rigth place
 		foundProduct = articles.find(product => product._id === cart[i].id); // We target each product in the API's articles array
 		// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-		let productArticle = document.createElement("article")
-		productArticle.id = cart[i].id;
+		productArticle = document.createElement("article")
+		productArticle.id = cart[i].id + cart[i].color
 		productArticle.className = "cart__item";
-		productsOrdered.appendChild(productArticle)
+		productsOrdered.appendChild(productArticle);
 		productArticle.innerHTML = `<div class="cart__item__img">
 										<img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
 									</div>
@@ -111,6 +112,7 @@ async function articleCartParams() {
 
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
 	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	console.log(deleteBtn)
 	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
 		deleteBtn[j].addEventListener("click", (event) => {
 			event.preventDefault();
@@ -135,7 +137,6 @@ async function articleCartParams() {
 articleCartParams();
 
 
-
 /////////////////////////////// The function to calculate the total QUANTITY and put it in the DOM
 function totalQuantityOfProduct () {
 	cart.forEach(element => { // We consider each element of the cart and we add its quantity to the global quantity
@@ -145,7 +146,7 @@ function totalQuantityOfProduct () {
 }
 totalQuantityOfProduct();
 
-
+deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
 
 /////////////////////////////// The function to calculate the TOTAL amount of the cart
 async function totalToPay () {
