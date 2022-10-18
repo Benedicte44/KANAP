@@ -113,7 +113,7 @@ async function articleCartParams() {
 
 
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
-	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	/*deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
 	console.log(deleteBtn)
 	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
 		deleteBtn[j].addEventListener("click", (event) => {
@@ -123,7 +123,7 @@ async function articleCartParams() {
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload(); // we refresh the page
 		});
-	}
+	}*/
 
 /////////////////////////////// The function to CHANGE QUANTITY and send it to the localStorage
 	inputQty = document.querySelectorAll(".itemQuantity"); // All the quantity inputs are targeted
@@ -135,8 +135,26 @@ async function articleCartParams() {
 			location.reload();// we refresh the page
 		});
 	}
+	deleteItem();
 }
 articleCartParams();
+
+function deleteItem() {
+	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	console.log(deleteBtn)
+	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
+		deleteBtn[j].addEventListener("click", (event) => {
+			event.preventDefault();
+			let targetedProduct = deleteBtn[j].closest("article").dataset.id;
+			let colorTargetedProduct = deleteBtn[j].closest("article").dataset.color;
+			let productToCancel = cart.find(product => product.id == targetedProduct && product.color == colorTargetedProduct);
+			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id from the targeted product
+			localStorage.setItem("cart", JSON.stringify(cart));
+			location.reload(); // we refresh the page
+		});
+	}
+}
+
 
 
 /////////////////////////////// The function to calculate the total QUANTITY and put it in the DOM
