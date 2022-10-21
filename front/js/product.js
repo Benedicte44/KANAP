@@ -1,5 +1,5 @@
 // Script for the product page
-import getArticles from "./script.js";
+import getArticles from "./script.js"; // Function to get all my articles in an array
 
 // Definition of variables
 let searchParams = new URLSearchParams(window.location.search); // We collect our url elements
@@ -45,27 +45,6 @@ async function main() {
 		}
 	});
 }
-
-
-
-// Function to get all my articles in an array
-/*async function getArticles() {
-	return fetch("http://localhost:3000/api/products") // we call the API
-		.then(function (httpBodyResponse) {
-			if (httpBodyResponse.ok) {
-				// if we have content we return a json file with all the data of the data base
-				return httpBodyResponse.json(); //
-			}
-		})
-		.then(async function (articles) {
-			// we return an array in the variable "articles" with all the products of the data base
-			return articles;
-		})
-		.catch(function (error) {
-			// if the connection to the API doesn't work we will have an error message in a pop up
-			alert(error);
-		});
-}*/
 
 
 

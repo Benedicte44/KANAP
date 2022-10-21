@@ -1,6 +1,10 @@
 ///////////////////////////////THE SCRIPT FOR THE CART PAGE
 
-import getArticles from "./script.js";
+import getArticles from "./script.js"; // Function to get all the API's articles in an array
+
+
+//--------------------------------DISPLAY THE CART AND ADD FUNCTION TO CHANGE QUANTITY AND DELETE ITEMS---------------------
+
 
 /////////////////////////////// Definition of variables
 let cart = ""; // The cart which is in our local Storage
@@ -17,31 +21,8 @@ let productArticle = "";
 
 
 
-/////////////////////////////// Function to get all the API's articles in an array
-
-/*async function getArticles() {
-	return fetch("http://localhost:3000/api/products") // we call the API
-		.then(function (httpBodyResponse) {
-			if (httpBodyResponse.ok) {
-				// if we have content we return a json file with all the data of the data base
-				return httpBodyResponse.json(); //
-			}
-		})
-		.then(async function (articles) {
-			// we return an array in the constant "articles" with all the products of the data base
-			return articles;
-		})
-		.catch(function (error) {
-			// if the connection to the API doesn't work we will have an error message in a pop up
-			alert(error);
-		});
-}*/
-
-
-
 /////////////////////////////// The function getCart is defined to get the cart which is in the localStorage
 getCart();
-
 function getCart() {
 	// We call our local storage to get the visitor cart in an array
 	cart = localStorage.getItem("cart");
@@ -55,106 +36,78 @@ function getCart() {
 }
 
 
-
 /////////////////////////////// Function to DISPLAY the products' details and make the cart dynamic with DELETE and CHANGE QUANTITY functions
 async function articleCartParams() {
 	articles = await getArticles(); // the constant "articles" takes all products contained in my data base in an array thanks to the run of the function ""getArticles"
 
 /////////////////////////////// Function to DISPLAY the article's attributes in the cart
-	for (let i = 0; i < cart.length; i++) { // We launch a for loop to get each articles with its details at the rigth place
-		foundProduct = articles.find(product => product._id === cart[i].id); // We target each product in the API's articles array
+	for (const element of cart) { // We launch a for loop to get each articles with its details at the rigth place
+		foundProduct = articles.find(product => product._id === element.id); // We target each product in the API's articles array
 		// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
 		productArticle = document.createElement("article")
-		productArticle.id = cart[i].id + cart[i].color
-		productArticle.className = "cart__item";
+		productArticle.setAttribute("data-id", element.id);
+		productArticle.setAttribute("data-color", element.color);
+		productArticle.classList.add ("cart__item");
 		productsOrdered.appendChild(productArticle);
 		productArticle.innerHTML = `<div class="cart__item__img">
-										<img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
+										<img src="${element.srcImg}" alt="${element.altTxt}">
 									</div>
 									<div class="cart__item__content">
 									<div class="cart__item__content__description">
-										<h2>${cart[i].name}</h2>
-										<p>${cart[i].color}</p>
+										<h2>${element.name}</h2>
+										<p>${element.color}</p>
 										<p>${foundProduct.price} €</p>
 									</div>
 									<div class="cart__item__content__settings">
 										<div class="cart__item__content__settings__quantity">
 										<p>Qté : </p>
-										<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantity}">
+										<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${element.quantity}">
 										</div> 
 										<div class="cart__item__content__settings__delete">
 													<p class="deleteItem">Supprimer</p>
 										</div>
 												</div>
-										</div>`
-		/*productsOrdered.innerHTML += `<article class="cart__item" id="${cart[i].id}" data-id="${cart[i].id}" data-color="${cart[i].color}">
-                                                          <div class="cart__item__img">
-                                                                    <img src="${cart[i].srcImg}" alt="${cart[i].altTxt}">
-                                                                </div>
-                                                                <div class="cart__item__content">
-                                                                <div class="cart__item__content__description">
-                                                                    <h2>${cart[i].name}</h2>
-                                                                    <p>${cart[i].color}</p>
-                                                                    <p>${foundProduct.price} €</p>
-                                                                </div>
-                                                                <div class="cart__item__content__settings">
-                                                                    <div class="cart__item__content__settings__quantity">
-                                                                    <p>Qté : </p>
-                                                                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantity}">
-                                                                    </div> 
-                                                                    <div class="cart__item__content__settings__delete">
-                                                                                <p class="deleteItem">Supprimer</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            </div>
-                                                                        </article>`;	*/							
+										</div>`						
 	}
-	
+	deleteItem();
+	changeQuantity();
+}
+articleCartParams();
 
 
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
-	/*deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
-	console.log(deleteBtn)
-	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
-		deleteBtn[j].addEventListener("click", (event) => {
+function deleteItem() {
+	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	for (const element of deleteBtn) { // We launch a for loop to take in consideration each button individually
+		element.addEventListener("click", (event) => {
 			event.preventDefault();
-			let productToCancel = cart.find(product => product.id == cart[j].id && product.color == cart[j].color);
-			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id from the targeted product
+			console.log("on écoute");
+			let targetedProduct = element.closest("article").dataset.id; // We get the id of the parent article
+			let colorTargetedProduct = element.closest("article").dataset.color; // We get the color of the parent article
+			let productToCancel = cart.find(product => product.id == targetedProduct && product.color == colorTargetedProduct);
+			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id and color from the targeted product
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload(); // we refresh the page
 		});
-	}*/
+	}
+}
+
 
 /////////////////////////////// The function to CHANGE QUANTITY and send it to the localStorage
+function changeQuantity () {
 	inputQty = document.querySelectorAll(".itemQuantity"); // All the quantity inputs are targeted
-	for (let k = 0; k < inputQty.length ; k++) {
-		inputQty[k].addEventListener("change", (event) => {
+	for (const element of inputQty) {
+		element.addEventListener("change", (event) => {
 			event.preventDefault();
-			cart[k].quantity = Number(inputQty[k].value) // We replace the quantity of product by the new quantity selected in the localStorage
+			let targetedInputProductId = element.closest("article").dataset.id;
+			let targetedInputProductColor = element.closest("article").dataset.color;
+			let productQtyToChange = cart.find(product => product.id == targetedInputProductId && product.color == targetedInputProductColor)
+			productQtyToChange.quantity = Number(element.value); // We replace the quantity of product by the new quantity selected in the localStorage
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload();// we refresh the page
 		});
 	}
-	deleteItem();
 }
-articleCartParams();
-
-function deleteItem() {
-	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
-	console.log(deleteBtn)
-	for (let j = 0; j < deleteBtn.length ; j++) { // We launch a for loop to take in consideration each button individually
-		deleteBtn[j].addEventListener("click", (event) => {
-			event.preventDefault();
-			let targetedProduct = deleteBtn[j].closest("article").dataset.id;
-			let colorTargetedProduct = deleteBtn[j].closest("article").dataset.color;
-			let productToCancel = cart.find(product => product.id == targetedProduct && product.color == colorTargetedProduct);
-			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id from the targeted product
-			localStorage.setItem("cart", JSON.stringify(cart));
-			location.reload(); // we refresh the page
-		});
-	}
-}
-
 
 
 /////////////////////////////// The function to calculate the total QUANTITY and put it in the DOM
@@ -165,6 +118,7 @@ function totalQuantityOfProduct () {
 	totalQuantity.innerText = quantitySum;
 }
 totalQuantityOfProduct();
+
 
 /////////////////////////////// The function to calculate the TOTAL amount of the cart
 async function totalToPay () {
@@ -182,3 +136,35 @@ totalToPay();
 if (cart.length == 0){
 	productsOrdered.innerHTML += `<p>Votre panier est vide</p>`;
 }
+
+
+
+
+//--------------------------------VALIDATE THE CONTACT DETAILS AND SEND THE ORDER--------------------------------------------
+
+let firstName = document.getElementById("firstName"); // We select the input for the firstname
+let firstNameErrorMsg = document.getElementById("firstNameErrorMsg"); // We select the elements where the firstname error message has to appear in case of syntaxe error
+let firstAndLastNameMask = /^[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/i ;
+let lastName = document.getElementById("lastName");
+let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+let adress = document.getElementById("adress");
+let adressErrorMsg = document.getElementById("adressErrorMsg");
+
+/////////////////////////////// FIRSTNAME input configuration
+firstName.addEventListener ("change", () =>{
+	if (firstAndLastNameMask.test(firstName.value) == false) {
+		firstNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre prénom sans chiffre ni caractères spéciaux."
+	} else {
+		firstNameErrorMsg.innerHTML = "";
+	};
+})
+
+/////////////////////////////// LASTNAME input configuration
+lastName.addEventListener ("change", () =>{
+	if (firstAndLastNameMask.test(lastName.value) == false) {
+		lastNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre nom de famille sans chiffre ni caractères spéciaux."
+	} else {
+		lastNameErrorMsg.innerHTML = "";
+	};
+})
+ 

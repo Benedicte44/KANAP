@@ -1,8 +1,13 @@
 // FILE FOR THE INDEX PAGE
 
-//Main function of the index page
+//Check that the index.html is found in the url in other to execute the main function
+let pageUrl = window.location.href.includes("index.html");
+console.log(pageUrl);
 
-main(); // The function "main" is defined and run at the launch of the page
+//Main function of the index page
+if (pageUrl) {
+	main(); // The function "main" is defined and run at the launch of the page
+}
 
 async function main() {
 	// the function main runs to display all products of the data base on the index page
@@ -34,25 +39,12 @@ export default async function getArticles() {
 
 // Function to display an article in my .items element
 function displayArticle(product) {
-	let section = document.getElementById("items");
-	console.log(product)
-	for (let p of product) {
-		let a = document.createElement('a');
-		a.setAttribute('href', './product.html?id=' + p._id);
-		section.appendChild(a);
-		let b = document.createElement('article');
-		a.appendChild(b);
-		b.innerHTML += "<img src=" + p.imageUrl + "alt=" + p.altTxt + ">" + "<h3 class='productName'" + p.name + "</h3>" + ">p class='productDescription'" + p.description + "</p>";
-	}
 	// we select the element HTML where products have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-	/*document.querySelector(
-		".items"
-	).innerHTML += `<a href="./product.html?id=${product._id}">
-                                                    <article>
-                                                    <img src="${product.imageUrl}" alt="${product.altTxt}">
-                                                    <h3 class="productName">${product.name}</h3>
-                                                    <p class="productDescription">${product.description}</p>
-                                                    </article>
-                                                    </a>`;
-													console.log(product._id)*/
+	let section = document.getElementById("items");
+	let a = document.createElement("a");
+	a.setAttribute("href", "./product.html?id=" + product._id);
+	section.appendChild(a);
+	let b = document.createElement("article");
+	a.appendChild(b);
+	b.innerHTML += "<img src=" + product.imageUrl + " alt=" + product.altTxt + ">" + "<h3 class='productName'>" + product.name + "</h3>" + "<p class='productDescription'>" + product.description + "</p>";
 }
