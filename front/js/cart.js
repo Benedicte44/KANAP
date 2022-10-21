@@ -144,16 +144,23 @@ if (cart.length == 0){
 
 let firstName = document.getElementById("firstName"); // We select the input for the firstname
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg"); // We select the elements where the firstname error message has to appear in case of syntaxe error
-let firstAndLastNameMask = /^[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð -]+$/i ;
+let nameMask = /^[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž∂ð' -]+$/i ;
 let lastName = document.getElementById("lastName");
 let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-let adress = document.getElementById("adress");
-let adressErrorMsg = document.getElementById("adressErrorMsg");
+let address = document.getElementById("address");
+let addressErrorMsg = document.getElementById("addressErrorMsg");
+let addressMask = /([0-9]*) ?([a-zA-Z,' ]+)/g;
+let city = document.getElementById("city");
+let cityErrorMsg = document.getElementById("cityErrorMsg");
+let email = document.getElementById("email");
+let emailErrorMsg = document.getElementById("emailErrorMsg");
+let emailMask = /^[a-zA-Z0-9\.\-_]+[@]{1}[a-zA-Z0-9.-_]+\.+[a-z]{2,10}$/;
+
 
 /////////////////////////////// FIRSTNAME input configuration
 firstName.addEventListener ("change", () =>{
-	if (firstAndLastNameMask.test(firstName.value) == false) {
-		firstNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre prénom sans chiffre ni caractères spéciaux."
+	if (nameMask.test(firstName.value) == false) {
+		firstNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre prénom sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
 	} else {
 		firstNameErrorMsg.innerHTML = "";
 	};
@@ -161,10 +168,36 @@ firstName.addEventListener ("change", () =>{
 
 /////////////////////////////// LASTNAME input configuration
 lastName.addEventListener ("change", () =>{
-	if (firstAndLastNameMask.test(lastName.value) == false) {
-		lastNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre nom de famille sans chiffre ni caractères spéciaux."
+	if (nameMask.test(lastName.value) == false) {
+		lastNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre nom de famille sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
 	} else {
 		lastNameErrorMsg.innerHTML = "";
 	};
 })
+
+/////////////////////////////// ADRESS input configuration
+address.addEventListener ("change", () =>{
+	if (addressMask.test(address.value) == false) {
+		addressErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse comprenant votre nom de rue sans caratères spéciaux (sauf le trait d'union (-), l'apostrophe ('), et la virgule(,))."
+	} else {
+		addressErrorMsg.innerHTML = "";
+	};
+})
+
+/////////////////////////////// CITY input configuration
+city.addEventListener ("change", () =>{
+	if (nameMask.test(city.value) == false) {
+		cityErrorMsg.innerHTML = "Vous devez obligatoirement renseigner un nom de ville correct sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+	} else {
+		cityErrorMsg.innerHTML = "";
+	};
+})
  
+/////////////////////////////// EMAIL input configuration
+email.addEventListener ("change", () =>{
+	if (emailMask.test(email.value) == false) {
+		emailErrorMsg.innerHTML = "Vous devez obligatoirement renseigner un nom de ville correct sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+	} else {
+		emailErrorMsg.innerHTML = "";
+	};
+})
