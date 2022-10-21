@@ -18,6 +18,13 @@ let totalPrice = document.getElementById("totalPrice"); // the place to put the 
 let inputQty = "";
 let deleteBtn = "";
 let productArticle = "";
+let contact = {
+	prenom : "",
+	nom : "",
+	adresse : "",
+	ville : "",
+	email : ""
+};
 
 
 
@@ -78,6 +85,7 @@ articleCartParams();
 /////////////////////////////// The function to DELETE a product and remove it from the localStorage
 function deleteItem() {
 	deleteBtn = document.querySelectorAll(".deleteItem"); // All the "delete" buttons are targeted
+	console.log(deleteBtn);
 	for (const element of deleteBtn) { // We launch a for loop to take in consideration each button individually
 		element.addEventListener("click", (event) => {
 			event.preventDefault();
@@ -158,46 +166,78 @@ let emailMask = /^[a-zA-Z0-9\.\-_]+[@]{1}[a-zA-Z0-9.-_]+\.+[a-z]{2,10}$/;
 
 
 /////////////////////////////// FIRSTNAME input configuration
-firstName.addEventListener ("change", () =>{
+firstName.addEventListener ("change", (e) =>{
 	if (nameMask.test(firstName.value) == false) {
 		firstNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre prénom sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
 	} else {
 		firstNameErrorMsg.innerHTML = "";
 	};
+	contact.prenom = e.target.value;
 })
 
 /////////////////////////////// LASTNAME input configuration
-lastName.addEventListener ("change", () =>{
+lastName.addEventListener ("change", (e) =>{
 	if (nameMask.test(lastName.value) == false) {
 		lastNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre nom de famille sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
 	} else {
 		lastNameErrorMsg.innerHTML = "";
 	};
+	contact.nom = e.target.value;
 })
 
 /////////////////////////////// ADRESS input configuration
-address.addEventListener ("change", () =>{
+address.addEventListener ("change", (e) =>{
 	if (addressMask.test(address.value) == false) {
 		addressErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse comprenant votre nom de rue sans caratères spéciaux (sauf le trait d'union (-), l'apostrophe ('), et la virgule(,))."
 	} else {
 		addressErrorMsg.innerHTML = "";
 	};
+	contact.adresse = e.target.value;
 })
 
 /////////////////////////////// CITY input configuration
-city.addEventListener ("change", () =>{
+city.addEventListener ("change", (e) =>{
 	if (nameMask.test(city.value) == false) {
 		cityErrorMsg.innerHTML = "Vous devez obligatoirement renseigner un nom de ville correct sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
 	} else {
 		cityErrorMsg.innerHTML = "";
 	};
+	contact.ville = e.target.value;
 })
  
 /////////////////////////////// EMAIL input configuration
-email.addEventListener ("change", () =>{
+email.addEventListener ("change", (e) =>{
 	if (emailMask.test(email.value) == false) {
-		emailErrorMsg.innerHTML = "Vous devez obligatoirement renseigner un nom de ville correct sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+		emailErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse email correct."
 	} else {
 		emailErrorMsg.innerHTML = "";
 	};
+	contact.email = e.target.value;
+	console.log(contact)
 })
+
+/*function inputCheck () {
+	let contactElement = document.querySelectorAll(".cart__order__form__question");
+	console.log(contactElement);
+	for (const element of contactElement){
+		let contactInput = element.children[1];
+		console.log(contactInput);
+		let contactErrorMsg = element.children[2];
+		contactInput.addEventListener("change", () => {
+			console.log(contactInput.id);
+			console.log(contactInput.value);
+			if (contactInput.id == "firstName"||contactInput.id == "lastName"||contactInput.id == "city" && (nameMask.test(contactInput.value) == false)){
+				console.log("je veux pas")
+				contactErrorMsg.innerHTML = "Erreur de saisie";
+				} else if (contactInput.id == "address"|| contactInput.id == "email" && (emailMask.test(contactInput.value) == false)){
+					contactErrorMsg.innerHTML = "on est sur la bonne voie"
+					} else {
+						contactErrorMsg.innerHTML ="";
+					};
+					
+		});
+	};
+};
+inputCheck();*/
+
+
