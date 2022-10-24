@@ -2,7 +2,6 @@
 
 import getArticles from "./script.js"; // Function to get all the API's articles in an array
 
-
 //--------------------------------DISPLAY THE CART AND ADD FUNCTION TO CHANGE QUANTITY AND DELETE ITEMS---------------------
 
 
@@ -18,13 +17,6 @@ let totalPrice = document.getElementById("totalPrice"); // the place to put the 
 let inputQty = "";
 let deleteBtn = "";
 let productArticle = "";
-let contact = {
-	prenom : "",
-	nom : "",
-	adresse : "",
-	ville : "",
-	email : ""
-};
 
 
 
@@ -150,70 +142,84 @@ if (cart.length == 0){
 
 //--------------------------------VALIDATE THE CONTACT DETAILS AND SEND THE ORDER--------------------------------------------
 
-let firstName = document.getElementById("firstName"); // We select the input for the firstname
+let firstNameInput = document.getElementById("firstName"); // We select the input for the firstname
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg"); // We select the elements where the firstname error message has to appear in case of syntaxe error
-let nameMask = /^[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž∂ð' -]+$/i ;
-let lastName = document.getElementById("lastName");
+let nameMask = /^[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž∂ð' -]+$/i ; // The regex mask for my text inputs
+let lastNameInput = document.getElementById("lastName");
 let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-let address = document.getElementById("address");
+let addressInput = document.getElementById("address");
 let addressErrorMsg = document.getElementById("addressErrorMsg");
 let addressMask = /([0-9]*) ?([a-zA-Z,' ]+)/g;
-let city = document.getElementById("city");
+let cityInput = document.getElementById("city");
 let cityErrorMsg = document.getElementById("cityErrorMsg");
-let email = document.getElementById("email");
+let emailInput = document.getElementById("email");
 let emailErrorMsg = document.getElementById("emailErrorMsg");
 let emailMask = /^[a-zA-Z0-9\.\-_]+[@]{1}[a-zA-Z0-9.-_]+\.+[a-z]{2,10}$/;
+let contact = { // the contact details sent to the API when the custormer confirm his order
+	firstName : "",
+	lastName : "",
+	address : "",
+	city : "",
+	email : ""
+};
+let products =[]; // the array that will be sent to the api when the customer send his order
+let submitOrderBtn = document.getElementById("order");
+
 
 
 /////////////////////////////// FIRSTNAME input configuration
-firstName.addEventListener ("change", (e) =>{
+firstNameInput.addEventListener ("change", (e) =>{
 	if (nameMask.test(firstName.value) == false) {
 		firstNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre prénom sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+		firstNameInput.value = "";
 	} else {
 		firstNameErrorMsg.innerHTML = "";
+		contact.firstName = e.target.value; // we fullfill the firstname details of the object contact with the value of the input
 	};
-	contact.prenom = e.target.value;
 })
 
 /////////////////////////////// LASTNAME input configuration
-lastName.addEventListener ("change", (e) =>{
+lastNameInput.addEventListener ("change", (e) =>{
 	if (nameMask.test(lastName.value) == false) {
 		lastNameErrorMsg.innerHTML = "Vous devez obligatoirement renseigner votre nom de famille sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+		lastNameInput.value = "";
 	} else {
 		lastNameErrorMsg.innerHTML = "";
+		contact.lastName = e.target.value; // we fullfill the lastname details of the object contact with the value of the input
 	};
-	contact.nom = e.target.value;
 })
 
 /////////////////////////////// ADRESS input configuration
-address.addEventListener ("change", (e) =>{
+addressInput.addEventListener ("change", (e) =>{
 	if (addressMask.test(address.value) == false) {
 		addressErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse comprenant votre nom de rue sans caratères spéciaux (sauf le trait d'union (-), l'apostrophe ('), et la virgule(,))."
+		addressInput.value = "";
 	} else {
 		addressErrorMsg.innerHTML = "";
+		contact.address = e.target.value; // we fullfill the address details of the object contact with the value of the input
 	};
-	contact.adresse = e.target.value;
 })
 
 /////////////////////////////// CITY input configuration
-city.addEventListener ("change", (e) =>{
+cityInput.addEventListener ("change", (e) =>{
 	if (nameMask.test(city.value) == false) {
 		cityErrorMsg.innerHTML = "Vous devez obligatoirement renseigner un nom de ville correct sans chiffre ni caractères spéciaux (sauf le trait d'union (-) et l'apostrophe ('))."
+		cityInput.value = "";
 	} else {
 		cityErrorMsg.innerHTML = "";
+		contact.city = e.target.value; // we fullfill the city details of the object contact with the value of the input
 	};
-	contact.ville = e.target.value;
 })
  
 /////////////////////////////// EMAIL input configuration
-email.addEventListener ("change", (e) =>{
+emailInput.addEventListener ("change", (e) =>{
 	if (emailMask.test(email.value) == false) {
-		emailErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse email correct."
+		emailErrorMsg.innerHTML = "Vous devez obligatoirement renseigner une adresse email valide."
+		emailInput.value = "";
 	} else {
 		emailErrorMsg.innerHTML = "";
+		contact.email = e.target.value; // we fullfill the email details of the object contact with the value of the input
 	};
-	contact.email = e.target.value;
-	console.log(contact)
 })
 
 /*function inputCheck () {
@@ -240,4 +246,55 @@ email.addEventListener ("change", (e) =>{
 };
 inputCheck();*/
 
+/////////////////////////////// Building of the order content
+
+// Function to send all the ordered products' ID in an array
+function productIdToSend (){
+	for (let product of cart) {
+		products.push(product.id);
+	}
+};
+
+
+// Function to send the order to the API
+let order = { products, contact }; // we create an object that contains the contact details and the order details.
+
+function sendToTheApi () {
+	fetch("http://localhost:3000/api/products/order", {
+		method: "POST",
+		headers: { 
+			'Accept': 'application/json', 
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(order)
+	})
+	.then((response) => {
+		if (response.ok) {
+			// if we have content we return a json
+			return response.json(); //
+		}
+	})
+	.then((data) => {
+		localStorage.clear(); // we clean the localStorage
+		console.log(data.orderId)
+		document.location.href = "./confirmation.html?order=" + data.orderId; // redirection to the confirmation page with the order id sent in the url
+	})
+	.catch(function (error) {
+		// if the connection to the API doesn't work we will have an error message in a pop up
+		alert("Erreur : " + error);
+	});
+}
+
+submitOrderBtn.addEventListener ("click", (e) => {
+	e.preventDefault();
+	// to check if all my inputs are fullfilled
+	if (cart.length == 0) {
+		alert("Votre panier est vide");
+	} else if (firstNameInput.value == "" || lastNameInput.value == "" || addressInput.value == "" || cityInput.value == "" || emailInput.value == ""){
+		alert("Vous devez remplir tous les champs");
+	} else {
+		productIdToSend();
+		sendToTheApi();
+	}
+})
 
