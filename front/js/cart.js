@@ -287,10 +287,10 @@ function sendToTheApi () {
 
 submitOrderBtn.addEventListener ("click", (e) => {
 	e.preventDefault();
-	// to check if all my inputs are fullfilled
 	if (cart.length == 0) {
 		alert("Votre panier est vide");
-	} else if (firstNameInput.value == "" || lastNameInput.value == "" || addressInput.value == "" || cityInput.value == "" || emailInput.value == ""){
+	} 	// to check if all my inputs are fullfilled
+	else if (firstNameInput.value == "" || lastNameInput.value == "" || addressInput.value == "" || cityInput.value == "" || emailInput.value == ""){
 		alert("Vous devez remplir tous les champs");
 	} else {
 		productIdToSend();
