@@ -8,6 +8,6 @@ let orderId = document.getElementById("orderId")
 if (searchParams.has("order")) {
 	orderNumber = searchParams.get("order");
     orderId.innerText = orderNumber;
-} else {
+} else /*if (orderNumber === " " || orderNumber === null)*/ {
     alert("Une erreur s'est produite lors de la transmission de votre commande. Merci de contacter le service client.")
 }
