@@ -31,6 +31,10 @@ function getCart() {
 	} else {
 		// If the cart ever exists, we parse the local storage datas
 		cart = JSON.parse(cart);
+		cart.sort((a, b) => {
+			return a.id.localeCompare(b.id);
+		});
+		localStorage.setItem("cart", JSON.stringify(cart));
 	}
 }
 
@@ -84,8 +88,7 @@ function deleteItem() {
 			console.log("on écoute");
 			let targetedProduct = element.closest("article").dataset.id; // We get the id of the parent article
 			let colorTargetedProduct = element.closest("article").dataset.color; // We get the color of the parent article
-			let productToCancel = cart.find(product => product.id == targetedProduct && product.color == colorTargetedProduct);
-			cart = cart.filter(p => p != productToCancel); // We keep in the localStorage the products which have a different id and color from the targeted product
+			cart = cart.filter(p => p.id !== targetedProduct || p.color !== colorTargetedProduct);// We keep in the localStorage the products which have a different id and color from the targeted product
 			localStorage.setItem("cart", JSON.stringify(cart));
 			location.reload(); // we refresh the page
 		});
@@ -222,29 +225,7 @@ emailInput.addEventListener ("change", (e) =>{
 	};
 })
 
-/*function inputCheck () {
-	let contactElement = document.querySelectorAll(".cart__order__form__question");
-	console.log(contactElement);
-	for (const element of contactElement){
-		let contactInput = element.children[1];
-		console.log(contactInput);
-		let contactErrorMsg = element.children[2];
-		contactInput.addEventListener("change", () => {
-			console.log(contactInput.id);
-			console.log(contactInput.value);
-			if (contactInput.id == "firstName"||contactInput.id == "lastName"||contactInput.id == "city" && (nameMask.test(contactInput.value) == false)){
-				console.log("je veux pas")
-				contactErrorMsg.innerHTML = "Erreur de saisie";
-				} else if (contactInput.id == "address"|| contactInput.id == "email" && (emailMask.test(contactInput.value) == false)){
-					contactErrorMsg.innerHTML = "on est sur la bonne voie"
-					} else {
-						contactErrorMsg.innerHTML ="";
-					};
-					
-		});
-	};
-};
-inputCheck();*/
+
 
 /////////////////////////////// Building of the order content
 
