@@ -37,7 +37,7 @@ function getCart() {
 		localStorage.setItem("cart", JSON.stringify(cart));
 	}
 }
-
+console.log(cart);
 
 /////////////////////////////// Function to DISPLAY the products' details and make the cart dynamic with DELETE and CHANGE QUANTITY functions
 async function articleCartParams() {
@@ -85,7 +85,6 @@ function deleteItem() {
 	for (const element of deleteBtn) { // We launch a for loop to take in consideration each button individually
 		element.addEventListener("click", (event) => {
 			event.preventDefault();
-			console.log("on écoute");
 			let targetedProduct = element.closest("article").dataset.id; // We get the id of the parent article
 			let colorTargetedProduct = element.closest("article").dataset.color; // We get the color of the parent article
 			cart = cart.filter(p => p.id !== targetedProduct || p.color !== colorTargetedProduct);// We keep in the localStorage the products which have a different id and color from the targeted product
@@ -106,8 +105,29 @@ function changeQuantity () {
 			let targetedInputProductColor = element.closest("article").dataset.color;
 			let productQtyToChange = cart.find(product => product.id == targetedInputProductId && product.color == targetedInputProductColor)
 			productQtyToChange.quantity = Number(element.value); // We replace the quantity of product by the new quantity selected in the localStorage
-			localStorage.setItem("cart", JSON.stringify(cart));
-			location.reload();// we refresh the page
+			if (productQtyToChange.quantity > 100) {
+				// if the quantity selected by our visitor is  > to 100
+				alert("La quantité que vous venez de saisir est supérieure à 100 et n'est pas valide."); // a pop up appears with a message
+				element.value = "1";
+				productQtyToChange.quantity = Number(element.value);
+				localStorage.setItem("cart", JSON.stringify(cart));
+				location.reload();// we refresh the page
+			} else if (productQtyToChange.quantity < 0 ) {
+				alert("La quantité que vous venez de saisir est inférieure à zéro, elle n'est pas valide.");
+				element.value = "1";
+				productQtyToChange.quantity = Number(element.value);
+				localStorage.setItem("cart", JSON.stringify(cart));
+				location.reload();// we refresh the page
+			} else if (productQtyToChange.quantity == 0) {
+				cart = cart.filter(p => p.id !== targetedInputProductId || p.color !== targetedInputProductColor);
+				localStorage.setItem("cart", JSON.stringify(cart));
+				location.reload();// we refresh the page
+			} else {
+				localStorage.setItem("cart", JSON.stringify(cart));
+				location.reload();// we refresh the page
+			}
+				
+			
 		});
 	}
 }
@@ -152,7 +172,7 @@ let lastNameInput = document.getElementById("lastName");
 let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
 let addressInput = document.getElementById("address");
 let addressErrorMsg = document.getElementById("addressErrorMsg");
-let addressMask = /([0-9]*) ?([a-zA-Z,' ]+)/g;
+let addressMask = /([0-9]*) ?([a-zA-Z,' -]+)/g;
 let cityInput = document.getElementById("city");
 let cityErrorMsg = document.getElementById("cityErrorMsg");
 let emailInput = document.getElementById("email");
@@ -272,7 +292,7 @@ submitOrderBtn.addEventListener ("click", (e) => {
 		alert("Votre panier est vide");
 	} 	// to check if all my inputs are fullfilled
 	else if (firstNameInput.value == "" || lastNameInput.value == "" || addressInput.value == "" || cityInput.value == "" || emailInput.value == ""){
-		alert("Vous devez remplir tous les champs");
+		alert("Vous devez remplir tous les champs du formulaire.");
 	} else {
 		productIdToSend();
 		sendToTheApi();
