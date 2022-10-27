@@ -121,10 +121,12 @@ addToCartBtn.addEventListener("click", function () {
 	if (productToAdd.quantity <= 0 || productToAdd.quantity > 100) {
 		// if the quantity selected by our visitor is < or = to 0 or > to 100
 		alert("La quantité que vous avez saisie n'est pas valide."); // a pop up appears with a message
-	} else if (productToAdd.color == "") {
+	} 
+	if (productToAdd.color == "") {
 		// otherwise, if there is no selected color
 		alert("Vous devez préciser votre choix de couleur."); // a pop up appears with a message
-	} else {
+	} 
+	if (productToAdd.quantity > 0 && productToAdd.quantity < 100 && productToAdd.color != "") {
 		// if a valide quantity and a color is selected, we add the product to the cart on the local storage
 		getCart();
 		addToCart();
