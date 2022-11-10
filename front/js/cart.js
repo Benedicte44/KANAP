@@ -31,9 +31,11 @@ function getCart() {
 	} else {
 		// If the cart ever exists, we parse the local storage datas
 		cart = JSON.parse(cart);
+		// and we sort the products by id
 		cart.sort((a, b) => {
 			return a.id.localeCompare(b.id);
 		});
+		// we register the cart sorted
 		localStorage.setItem("cart", JSON.stringify(cart));
 	}
 }
