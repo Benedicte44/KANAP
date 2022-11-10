@@ -51,11 +51,11 @@ async function main() {
 // Function to display the article's attributes
 function displayArticle(object) {
 	// we select the element HTML where the attributes of the product have to appear, and we fullfill all the fields of the product thanks to the selection of the targeted key of the array "articles"
-	pageTitle.innerHTML += ` : ${object.name}`; //the name of the product to appear on the page title
-	productImage.innerHTML += `<img src="${object.imageUrl}" alt="${object.altTxt}">`; // the product's image with its alternative text
-	productName.innerHTML += object.name; // the product's name in the title of the product's description
-	productPrice.innerHTML += object.price; // the price
-	productDescription.innerHTML += `${object.description}`; // the description
+	pageTitle.innerHTML = `${object.name}`; //the name of the product to appear on the page title
+	productImage.innerHTML = `<img src="${object.imageUrl}" alt="${object.altTxt}">`; // the product's image with its alternative text
+	productName.innerHTML = object.name; // the product's name in the title of the product's description
+	productPrice.innerHTML = object.price; // the price
+	productDescription.innerHTML = `${object.description}`; // the description
 	productColors = object.colors; // This data is an array that contains the product's colors
 	productColors.forEach((element) => {
 		// We define a forEach loop that creates a new color option for each color of the array productColor
