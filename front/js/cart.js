@@ -35,8 +35,6 @@ function getCart() {
 		cart.sort((a, b) => {
 			return a.id.localeCompare(b.id);
 		});
-		// we register the cart sorted
-		localStorage.setItem("cart", JSON.stringify(cart));
 	}
 }
 console.log(cart);
